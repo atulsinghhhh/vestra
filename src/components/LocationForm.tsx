@@ -8,13 +8,15 @@ type Props = {
   initialCity?: string;
   initialCountry?: string;
   onSaveSuccess?: () => void;
+  initialWeatherPreferences?: string;
 };
 
-export default function LocationForm({ userId, initialCity = "", initialCountry = "", onSaveSuccess }: Props) {
+export default function LocationForm({ userId, initialCity = "", initialCountry = "", initialWeatherPreferences = "", onSaveSuccess }: Props) {
   const supabase = createClient();
   const router = useRouter();
   const [city, setCity] = useState(initialCity);
   const [country, setCountry] = useState(initialCountry);
+  const [weatherPreferences, setWeatherPreferences] = useState(initialWeatherPreferences);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
@@ -23,7 +25,7 @@ export default function LocationForm({ userId, initialCity = "", initialCountry 
     e.preventDefault();
     setError(null); setSuccess(false); setSaving(true);
     try {
-      const payload = { user_id: userId, city, country };
+      const payload = { user_id: userId, city, country, weather_preferences: weatherPreferences || null };
       const { error } = await supabase.from('user_location').upsert(payload, { onConflict: 'user_id' });
       if (error) throw error;
       setSuccess(true);
@@ -57,6 +59,16 @@ export default function LocationForm({ userId, initialCity = "", initialCountry 
           value={country}
           onChange={(e) => setCountry(e.target.value)}
           required
+        />
+      </div>
+      <div>
+        <label className="text-xs text-gray-400 uppercase tracking-wide font-medium block mb-2">Weather preferences (optional)</label>
+        <textarea
+          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3.5 text-sm text-white placeholder-gray-500 outline-none resize-none"
+          rows={3}
+          placeholder="e.g., prefer mild mornings, avoid heavy rain outfits"
+          value={weatherPreferences}
+          onChange={(e) => setWeatherPreferences(e.target.value)}
         />
       </div>
       <button

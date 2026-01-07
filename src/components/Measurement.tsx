@@ -4,7 +4,7 @@ import { createClient } from "@/lib/supabase/client";
 import { BodyClassifyType, MeasurementUnitEnum } from "@/lib/bodyType";
 import { generateOutfit } from "@/lib/huggingface/generateOutfit";
 import { useState, useEffect } from "react";
-import SkinToneQuiz from "@/components/SkinToneQuiz";
+
 
 type MeasurementProps = {
     onSaveSuccess?: () => void;
