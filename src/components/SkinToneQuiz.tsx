@@ -14,9 +14,10 @@ import {
 
 type Props = {
     userId: string | null;
+    onSaveSuccess?: () => void;
 };
 
-export default function SkinToneQuiz({ userId }: Props) {
+export default function SkinToneQuiz({ userId, onSaveSuccess }: Props) {
   const supabase = createClient();
 
   const [skinTone, setSkinTone] = useState<string>("");
@@ -118,6 +119,7 @@ export default function SkinToneQuiz({ userId }: Props) {
         return;
       }
       setSuccess(true);
+      onSaveSuccess?.();
     } catch (e: any) {
       setError(e?.message || "Failed to save skin profile.");
     } finally {

@@ -7,9 +7,10 @@ type Props = {
   userId: string;
   initialCity?: string;
   initialCountry?: string;
+  onSaveSuccess?: () => void;
 };
 
-export default function LocationForm({ userId, initialCity = "", initialCountry = "" }: Props) {
+export default function LocationForm({ userId, initialCity = "", initialCountry = "", onSaveSuccess }: Props) {
   const supabase = createClient();
   const router = useRouter();
   const [city, setCity] = useState(initialCity);
@@ -26,6 +27,7 @@ export default function LocationForm({ userId, initialCity = "", initialCountry 
       const { error } = await supabase.from('user_location').upsert(payload, { onConflict: 'user_id' });
       if (error) throw error;
       setSuccess(true);
+      onSaveSuccess?.();
       router.refresh();
     } catch (err: any) {
       setError(err?.message || 'Failed to save location');
