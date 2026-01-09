@@ -42,7 +42,7 @@ export type FormalityEnum = typeof FORMALITY_ENUM[number];
 export type SeasonOption = typeof SEASON_OPTIONS[number];
 
 export type WardrobeItem = {
-  item_id?: string;
+  id?: string;
   user_id: string;
   item_name: string;
   category: WardrobeCategoryEnum;

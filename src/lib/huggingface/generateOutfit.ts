@@ -38,11 +38,9 @@ export async function generateOutfit(userId: string) {
     if (rawSeason === "spring" || rawSeason === "summar" || rawSeason === "autumn" || rawSeason === "winter") {
         seasonUi = rawSeason === "summar" ? "summer" : rawSeason;
     } else if (skin?.skin_tone && skin?.undertone && isValidSkinTone(String(skin.skin_tone)) && isValidUndertone(String(skin.undertone))) {
-        // Fallback: infer season from stored skin tone + undertone
         seasonUi = calculateSeason(String(skin.undertone) as any, String(skin.skin_tone) as any);
     }
 
-    // Location and live weather
     const location = await getUserLocationByUserId(userId);
     let weatherText = "";
     let categories: string[] = [];

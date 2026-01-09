@@ -107,16 +107,13 @@ export default function WardrobeItemForm({ userId, onSaveSuccess }: Props) {
 
       if (uploadError) throw uploadError;
 
-      const { data, error: signedError } =
-        await supabase.storage
-          .from("wardrobes")
-          .createSignedUrl(fileName, 60 * 60); 
-
-      if (signedError) throw signedError;
+      const { data: publicData } = supabase.storage
+        .from("wardrobes")
+        .getPublicUrl(fileName);
 
       setFormData((prev) => ({
         ...prev,
-        image_url: data.signedUrl,
+        image_url: publicData.publicUrl,
       }));
     } catch (err: any) {
       setError(err?.message || "Failed to upload image");

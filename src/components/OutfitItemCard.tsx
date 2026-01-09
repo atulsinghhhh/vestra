@@ -52,7 +52,7 @@ function OutfitItemCard({
 
                 {/* Exclude Button */}
                 <button
-                    onClick={() => onExclude(item.item_id || (item as any).id)}
+                    onClick={() => onExclude(item.id)}
                     className="w-full text-xs py-2 rounded-lg bg-red-500/10 border border-red-500/30 text-red-300 hover:bg-red-500/20 transition-all"
                 >
                     Exclude Item

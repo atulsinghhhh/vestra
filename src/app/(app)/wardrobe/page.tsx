@@ -96,7 +96,7 @@ function WardrobePage() {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                         {wardrobeItems.map((item) => (
                             <div
-                                key={item.item_id}
+                                key={item.id}
                                 className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:bg-white/10 transition group"
                             >
                                 {item.image_url ? (
