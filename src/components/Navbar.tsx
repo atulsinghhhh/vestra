@@ -6,19 +6,38 @@ import { createClient } from "@/lib/supabase/client";
 import { useState, useEffect } from "react";
 import { User } from "@supabase/supabase-js";
 
+import { getPublicImageUrl } from "@/lib/supabase/imageUtils";
+
 export default function Navbar({ user }: { user: User | null }) {
     const pathname = usePathname();
     const supabase = createClient();
     const [scrolled, setScrolled] = useState(false);
-    const [userMenuOpen, setUserMenuOpen] = useState(false);
+    const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
 
     useEffect(() => {
         const handleScroll = () => {
             setScrolled(window.scrollY > 20);
         };
         window.addEventListener("scroll", handleScroll);
+        
+        const fetchAvatar = async () => {
+            if (!user) return;
+            const { data: profile } = await supabase
+                .from('profiles')
+                .select('avatar_url')
+                .eq('id', user.id)
+                .single();
+            
+            if (profile?.avatar_url) {
+                const url = await getPublicImageUrl(profile.avatar_url, "profiles");
+                setAvatarUrl(url);
+            }
+        };
+
+        fetchAvatar();
+
         return () => window.removeEventListener("scroll", handleScroll);
-    }, []);
+    }, [user]);
 
     if (pathname === "/login" || pathname === "/signup") return null;
 
@@ -35,7 +54,7 @@ export default function Navbar({ user }: { user: User | null }) {
                 </div>
                 {/* Desktop Nav Links */}
                 <div className="hidden md:flex items-center gap-8">
-                    <Link href="/" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">Dashboard</Link>
+                    <Link href="/dashboard" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">Dashboard</Link>
                     <Link href="/wardrobe" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">Wardrobe</Link>
                     <Link href="/packing" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">Packing</Link>
                     <Link href="/occasions" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">Occasions</Link>
@@ -44,34 +63,23 @@ export default function Navbar({ user }: { user: User | null }) {
 
                 <div className="flex items-center gap-4">
                     {user ? (
-                         <div className="relative">
+                         <div className="flex items-center gap-4">
+                            <Link href="/profile" className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 transition-all border border-white/5">
+                                <div className="w-8 h-8 rounded-full bg-indigo-500 flex items-center justify-center text-xs font-bold text-white overflow-hidden relative border border-white/10">
+                                    <img 
+                                        src={avatarUrl || "/404.png"} 
+                                        alt="User" 
+                                        className="w-full h-full object-cover" 
+                                    />
+                                </div>
+                            </Link>
+                            
                             <button 
-                                onClick={() => setUserMenuOpen(!userMenuOpen)}
-                                className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 transition-all border border-white/5"
+                                onClick={handleLogout}
+                                className="text-sm font-medium text-red-400 hover:text-red-300 transition-colors"
                             >
-                                <div className="w-6 h-6 rounded-full bg-indigo-500 flex items-center justify-center text-xs font-bold text-white">
-                                    {user.email?.charAt(0).toUpperCase()}
-                                </div>
-                                <span className="text-sm font-medium hidden sm:inline-block">{user.email?.split('@')[0]}</span>
+                                Logout
                             </button>
-
-                            {userMenuOpen && (
-                                <div className="absolute right-0 mt-2 w-48 bg-zinc-900 border border-white/10 rounded-xl shadow-xl py-1 overflow-hidden animate-in fade-in zoom-in-95 duration-200">
-                                    <Link href="/profile" className="block px-4 py-2.5 text-sm text-gray-300 hover:bg-white/10 hover:text-white transition-colors">
-                                        Your Profile
-                                    </Link>
-                                    <Link href="/settings" className="block px-4 py-2.5 text-sm text-gray-300 hover:bg-white/10 hover:text-white transition-colors">
-                                        Settings
-                                    </Link>
-                                    <div className="h-px bg-white/10 my-1"></div>
-                                    <button 
-                                        onClick={handleLogout}
-                                        className="w-full text-left px-4 py-2.5 text-sm text-red-400 hover:bg-red-500/10 transition-colors"
-                                    >
-                                        Log Out
-                                    </button>
-                                </div>
-                            )}
                          </div>
                     ) : (
                         <div className="flex items-center gap-4">

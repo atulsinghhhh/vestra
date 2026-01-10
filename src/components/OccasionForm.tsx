@@ -68,7 +68,7 @@ export default function OccasionForm({ onSuccess }: { onSuccess: () => void }) {
                         name="date_time"
                         value={form.date_time}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all [color-scheme:dark]"
+                        className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all scheme-dark"
                         required
                     />
                 </div>
@@ -134,7 +134,7 @@ export default function OccasionForm({ onSuccess }: { onSuccess: () => void }) {
             <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3.5 rounded-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold shadow-lg shadow-purple-500/20 hover:shadow-purple-500/30 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 mt-2"
+                className="w-full py-3.5 rounded-full bg-linear-to-r from-purple-600 to-indigo-600 text-white font-semibold shadow-lg shadow-purple-500/20 hover:shadow-purple-500/30 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 mt-2"
             >
                 {loading ? "Creating..." : "Create Occasion"}
             </button>

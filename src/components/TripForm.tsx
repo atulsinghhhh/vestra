@@ -84,7 +84,7 @@ function TripForm({ onSuccess }: { onSuccess?: () => void }) {
                         name="start_date" 
                         value={trips.start_date} 
                         onChange={handleChange} 
-                        className="block w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all [color-scheme:dark]" 
+                        className="block w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all scheme-dark" 
                         required 
                     />
                 </div>
@@ -95,7 +95,7 @@ function TripForm({ onSuccess }: { onSuccess?: () => void }) {
                         name="end_date" 
                         value={trips.end_date} 
                         onChange={handleChange} 
-                        className="block w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all [color-scheme:dark]" 
+                        className="block w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all scheme-dark" 
                         required 
                     />
                 </div>
@@ -131,7 +131,7 @@ function TripForm({ onSuccess }: { onSuccess?: () => void }) {
             <button 
                 type="submit" 
                 disabled={loading} 
-                className="w-full py-3.5 rounded-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold shadow-lg shadow-purple-500/20 hover:shadow-purple-500/30 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed mt-2"
+                className="w-full py-3.5 rounded-full bg-linear-to-r from-purple-600 to-indigo-600 text-white font-semibold shadow-lg shadow-purple-500/20 hover:shadow-purple-500/30 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed mt-2"
             >
                 {loading ? (
                     <span className="flex items-center justify-center gap-2">

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { getDailyOutfitAction, confirmOutfitWearAction } from "@/app/actions/ootd";
+import { getDailyOutfitAction, confirmOutfitWearAction } from "@/lib/ootd/ootd";
 import { OOTDResult } from "@/lib/ootd/ootdLogic";
 
 export default function Dashboard({ user }: { user: any }) {
@@ -10,6 +10,7 @@ export default function Dashboard({ user }: { user: any }) {
     const [loading, setLoading] = useState(true);
     const [wearing, setWearing] = useState(false);
     const [wornToday, setWornToday] = useState(false);
+    const [greeting, setGreeting] = useState("Good Morning");
 
     const loadOOTD = async () => {
         setLoading(true);
@@ -25,14 +26,22 @@ export default function Dashboard({ user }: { user: any }) {
 
     useEffect(() => {
         loadOOTD();
+        
+        const hour = new Date().getHours();
+        if (hour < 12) setGreeting("Good Morning");
+        else if (hour < 18) setGreeting("Good Afternoon");
+        else setGreeting("Good Evening");
     }, []);
 
     const handleWear = async () => {
         if (!ootd) return;
         setWearing(true);
         try {
-            await confirmOutfitWearAction(ootd.outfit.items.map(i => i.item_id));
-            setWornToday(true);
+            const itemIds = ootd.outfit.items.map(i => i.id).filter((id): id is string => !!id);
+            if(itemIds.length > 0) {
+                 await confirmOutfitWearAction(itemIds);
+                 setWornToday(true);
+            }
         } catch (e) {
             alert("Failed to update stats");
         } finally {
@@ -40,19 +49,23 @@ export default function Dashboard({ user }: { user: any }) {
         }
     };
 
+    const displayName = user?.user_metadata?.full_name || 
+                        user?.user_metadata?.name || 
+                        user?.email?.split('@')[0] || 
+                        "User";
+
     return (
-        <div className="min-h-screen bg-black text-white p-6 md:p-12">
+        <div className="min-h-screen bg-black text-white pt-24 px-6 pb-6 md:pt-32 md:px-12 md:pb-12">
             <div className="max-w-6xl mx-auto">
                 <header className="flex justify-between items-center mb-12">
                     <div>
-                        <h1 className="text-3xl font-bold">Good Morning, {user.email?.split('@')[0]}</h1>
+                        <h1 className="text-3xl font-bold">{greeting}, {displayName}</h1>
                         <p className="text-gray-400">Here's your style forecast for today.</p>
                     </div>
                 </header>
 
-                {/* Hero: OOTD Card */}
                 <section className="mb-12">
-                    <div className="bg-gradient-to-br from-zinc-900 to-black border border-white/10 rounded-3xl p-8 shadow-2xl relative overflow-hidden">
+                    <div className="bg-linear-to-br from-zinc-900 to-black border border-white/10 rounded-3xl p-8 shadow-2xl relative overflow-hidden">
                         <div className="absolute top-0 right-0 p-8 opacity-20 pointer-events-none">
                             <svg className="w-64 h-64 text-purple-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
                         </div>
@@ -65,7 +78,7 @@ export default function Dashboard({ user }: { user: any }) {
                                     Outfit of the Day
                                 </div>
                                 
-                                <h2 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">
+                                <h2 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-linear-to-r from-white to-gray-400">
                                     Why this fits today.
                                 </h2>
                                 
@@ -120,7 +133,7 @@ export default function Dashboard({ user }: { user: any }) {
                                 ) : ootd && ootd.outfit ? (
                                     <div className="grid grid-cols-2 gap-4 h-full content-center">
                                          {ootd.outfit.items.map((item: any, i: number) => (
-                                             <div key={i} className="group relative aspect-[3/4] bg-white/5 rounded-2xl overflow-hidden border border-white/5">
+                                             <div key={i} className="group relative aspect-3/4 bg-white/5 rounded-2xl overflow-hidden border border-white/5">
                                                  {item.image_url ? (
                                                      <img src={item.image_url} alt={item.item_name} className="w-full h-full object-cover transition-transform group-hover:scale-105" />
                                                  ) : (
@@ -136,8 +149,6 @@ export default function Dashboard({ user }: { user: any }) {
                                 ) : null}
                             </div>
                         </div>
-
-                        {/* Weather Badge */}
                         {ootd && ootd.weather && (
                             <div className="absolute bottom-8 right-8 flex items-center gap-2 bg-black/50 backdrop-blur-md px-4 py-2 rounded-full border border-white/10 text-sm text-gray-300">
                                 <span>{ootd.weather.city}</span>
@@ -147,8 +158,6 @@ export default function Dashboard({ user }: { user: any }) {
                         )}
                     </div>
                 </section>
-                
-                {/* Stats Section / Quick Links could go here */}
             </div>
         </div>
     );

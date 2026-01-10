@@ -1,7 +1,7 @@
 
 import { createClient } from "./client";
 
-export const getPublicImageUrl = async (path: string | undefined): Promise<string | null> => {
+export const getPublicImageUrl = async (path: string | undefined, bucket: string = "private"): Promise<string | null> => {
     if (!path) return null;
 
     if (path.startsWith("http") || path.startsWith("blob:")) {
@@ -12,11 +12,11 @@ export const getPublicImageUrl = async (path: string | undefined): Promise<strin
     
     const { data, error } = await supabase
         .storage
-        .from("private")
+        .from(bucket)
         .createSignedUrl(path, 3600);
 
     if (error) {
-        console.error("Error creating signed URL:", error);
+        console.error(`Error creating signed URL from bucket '${bucket}':`, error);
         return null;
     }
 

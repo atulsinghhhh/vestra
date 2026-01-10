@@ -35,7 +35,7 @@ export default function PackingDashboard() {
     return (
         <div className="max-w-6xl mx-auto px-6 py-12 text-white">
             <div className="mb-12">
-                <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-purple-200 to-indigo-200 mb-4">
+                <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-linear-to-r from-white via-purple-200 to-indigo-200 mb-4">
                     Smart Packing Assistant
                 </h1>
                 <p className="text-gray-400 text-lg max-w-2xl">
@@ -46,7 +46,7 @@ export default function PackingDashboard() {
             <div className="grid lg:grid-cols-12 gap-10">
                 {/* Left: Add Trip & List (5 cols) */}
                 <div className="lg:col-span-5 space-y-8">
-                    <section className="bg-white/[0.03] backdrop-blur-xl border border-white/10 p-8 rounded-3xl shadow-2xl shadow-black/50">
+                    <section className="bg-white/3 backdrop-blur-xl border border-white/10 p-8 rounded-3xl shadow-2xl shadow-black/50">
                         <div className="flex items-center gap-3 mb-6">
                             <div className="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center text-purple-300">
                                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" /></svg>
@@ -110,7 +110,7 @@ export default function PackingDashboard() {
 
                 {/* Right: Generated List (7 cols) */}
                 <div className="lg:col-span-7">
-                    <div className="bg-white/[0.03] backdrop-blur-xl border border-white/10 p-8 rounded-3xl min-h-[600px] shadow-2xl shadow-black/50 relative overflow-hidden">
+                    <div className="bg-white/3 backdrop-blur-xl border border-white/10 p-8 rounded-3xl min-h-[600px] shadow-2xl shadow-black/50 relative overflow-hidden">
                         {/* Decorative background blob */}
                         <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-purple-600/10 rounded-full blur-[100px] pointer-events-none" />
 
@@ -131,7 +131,7 @@ export default function PackingDashboard() {
                             </div>
                         ) : (
                             <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500 relative z-10">
-                                <div className="bg-gradient-to-br from-purple-900/40 to-indigo-900/40 p-6 rounded-2xl border border-white/10">
+                                <div className="bg-linear-to-br from-purple-900/40 to-indigo-900/40 p-6 rounded-2xl border border-white/10">
                                     <div className="flex justify-between items-start">
                                         <div>
                                             <p className="text-xs font-bold text-purple-300 uppercase tracking-widest mb-1">Weather Context</p>

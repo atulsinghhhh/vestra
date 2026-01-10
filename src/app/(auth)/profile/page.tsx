@@ -11,6 +11,7 @@ interface Profile {
   username: string | null;
   email: string | null; 
   avatar_url: string | null;
+  gender: string | null;
 }
 
 export default function ProfilePage() {
@@ -29,6 +30,7 @@ export default function ProfilePage() {
     const [formData, setFormData] = useState({
         username: "",
         full_name: "",
+        gender: "",
     });
 
     useEffect(() => {
@@ -57,6 +59,7 @@ export default function ProfilePage() {
                 setFormData({
                     username: profileData.username || "",
                     full_name: profileData.full_name || "",
+                    gender: profileData.gender || "",
                 });
 
                 if (profileData.avatar_url) {
@@ -92,6 +95,7 @@ export default function ProfilePage() {
                 email: user.email,
                 username: formData.username,
                 full_name: formData.full_name,
+                gender: formData.gender,
             };
 
             const { error } = await supabase.from("profiles").upsert(updates);
@@ -159,7 +163,7 @@ export default function ProfilePage() {
     }
 
     return (
-        <div className="min-h-screen w-full bg-[#050505] text-gray-200 font-sans selection:bg-white/10 p-6 md:p-12">
+        <div className="min-h-screen w-full bg-[#050505] text-gray-200 font-sans selection:bg-white/10 pt-24 px-6 pb-6 md:pt-32 md:px-12 md:pb-12">
             <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] rounded-full bg-purple-900/10 blur-[120px] pointer-events-none" />
             <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] rounded-full bg-indigo-900/10 blur-[120px] pointer-events-none" />
 
@@ -274,6 +278,31 @@ export default function ProfilePage() {
                             </div>
 
 
+                            <div className="space-y-2">
+                                <label className="text-xs uppercase tracking-wider text-gray-500 font-semibold">Gender</label>
+                                {editing ? (
+                                    <div className="relative">
+                                        <select
+                                            value={formData.gender}
+                                            onChange={(e) => setFormData({...formData, gender: e.target.value})}
+                                            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:bg-white/10 focus:border-white/20 outline-none transition-all appearance-none cursor-pointer"
+                                        >
+                                            <option value="" disabled className="bg-zinc-900 text-gray-500">Select Gender</option>
+                                            <option value="male" className="bg-zinc-900">male</option>
+                                            <option value="female" className="bg-zinc-900">female</option>
+                                            <option value="unisex" className="bg-zinc-900">unisex</option>
+                                        </select>
+                                        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-400">
+                                            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" /></svg>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className="w-full px-4 py-3 text-sm text-white border border-transparent">
+                                        {formData.gender || <span className="text-gray-600 italic">Not set</span>}
+                                    </div>
+                                )}
+                            </div>
+
                             {editing && (
                                 <div className="flex gap-4 pt-4">
                                     <button 
@@ -289,9 +318,10 @@ export default function ProfilePage() {
                                             setEditing(false);
                                             if (profile) {
                                                 setFormData({
-                                                        username: profile.username || "",
-                                                        full_name: profile.full_name || "",
-                                                    });
+                                                    username: profile.username || "",
+                                                    full_name: profile.full_name || "",
+                                                    gender: profile.gender || "",
+                                                });
                                             }
                                         }}
                                         className="flex-1 bg-transparent border border-white/10 text-white font-medium py-3 rounded-xl hover:bg-white/5 transition-all"

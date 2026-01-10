@@ -105,7 +105,7 @@ export default function OnboardingPage() {
     );
 
     return (
-        <div className="min-h-screen w-full bg-[#050505] flex items-center justify-center py-12 relative overflow-hidden text-gray-200 font-sans selection:bg-white/10">
+        <div className="min-h-screen w-full bg-[#050505] flex items-center justify-center pt-24 pb-12 relative overflow-hidden text-gray-200 font-sans selection:bg-white/10">
         {/* Background effects */}
         <div className="absolute top-[-10%] left-[-10%] w-[600px] h-[600px] rounded-full bg-purple-900/10 blur-[120px] animate-pulse pointer-events-none" />
         <div className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] rounded-full bg-indigo-900/10 blur-[120px] pointer-events-none" />

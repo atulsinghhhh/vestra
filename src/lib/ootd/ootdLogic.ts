@@ -25,6 +25,15 @@ export type OOTDResult = {
 export async function generateOOTD(userId: string): Promise<OOTDResult> {
     const supabase = await createClient();
 
+    // 0. Context: Profile (Gender)
+    const { data: profile } = await supabase
+        .from('profiles')
+        .select('gender')
+        .eq('id', userId)
+        .maybeSingle();
+
+    const genderContext = profile?.gender ? `Gender: ${profile.gender}` : "Gender: Unisex";
+
     // 1. Context: Weather
     const location = await getUserLocationByUserId(userId);
     let weatherCondition: WeatherCondition = "neutral";
@@ -95,6 +104,7 @@ export async function generateOOTD(userId: string): Promise<OOTDResult> {
     SYSTEM ROLE: You evaluate pre-validated outfits. You cannot create or modify outfits.
     
     USER CONTEXT:
+    - ${genderContext}
     - Weather: ${weatherText}
     - Temperature: ${temp}C
     - Goal: Select the single best "Outfit of the Day".

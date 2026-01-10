@@ -82,7 +82,7 @@ function WardrobePage() {
     };
 
     return (
-        <div className="min-h-screen w-full bg-[#050505] py-12 relative overflow-hidden text-gray-200 font-sans">
+        <div className="min-h-screen w-full bg-[#050505] pt-24 pb-12 relative overflow-hidden text-gray-200 font-sans">
             {/* Background effects */}
             <div className="absolute top-[-10%] left-[-10%] w-[600px] h-[600px] rounded-full bg-purple-900/10 blur-[120px] animate-pulse pointer-events-none" />
             <div className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] rounded-full bg-indigo-900/10 blur-[120px] pointer-events-none" />
