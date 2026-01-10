@@ -8,6 +8,14 @@ const nextConfig: NextConfig = {
         hostname: "iqjdcelihzdjpsqnveex.supabase.co",
         pathname: "/storage/v1/object/**",
       },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+      },
+      {
+        protocol: "https",
+        hostname: "www.mytheresa.com",
+      },
     ],
   },
 };

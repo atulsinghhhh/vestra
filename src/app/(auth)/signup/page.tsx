@@ -40,7 +40,7 @@ export default function SignupPage() {
       // Step 3: Handle redirect based on session availability
       if (data.session) {
         // No email confirmation required
-        router.push("/");
+        router.push("/login");
       } else {
         // Email confirmation required
         setError("Account created! Please check your email to confirm your account.");

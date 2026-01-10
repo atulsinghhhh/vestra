@@ -1,9 +1,7 @@
 
-import { 
-    WardrobeItem, 
-    FormalityEnum, 
-    SeasonOption,
-    PatternEnum
+import {
+    WardrobeItem,
+    FormalityEnum
 } from "./types";
 
 export type WeatherCondition = "hot" | "cold" | "rainy" | "neutral";

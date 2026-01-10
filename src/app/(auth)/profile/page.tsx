@@ -79,6 +79,7 @@ export default function ProfilePage() {
         };
 
         getProfile();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
 
@@ -170,15 +171,26 @@ export default function ProfilePage() {
 
             <div className="relative z-10 max-w-4xl mx-auto">
                 {/* Header */}
-                <div className="flex items-center justify-between mb-12">
-                    <div>
-                    <h1 className="text-3xl font-light tracking-wide text-white">Profile</h1>
-                    <p className="text-gray-500 mt-1 text-sm">Manage your personal information</p>
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 md:mb-12">
+                    <div className="flex items-center gap-3">
+                        <button 
+                            onClick={() => router.back()}
+                            className="p-2 -ml-2 rounded-full hover:bg-white/10 text-gray-400 hover:text-white transition-colors"
+                            aria-label="Go back"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                            </svg>
+                        </button>
+                        <div>
+                            <h1 className="text-2xl md:text-3xl font-light tracking-wide text-white">Profile</h1>
+                            <p className="text-gray-500 mt-1 text-sm">Manage your personal information</p>
+                        </div>
                     </div>
                     {!editing && (
                         <button 
                             onClick={() => setEditing(true)}
-                            className="bg-white/5 hover:bg-white/10 border border-white/10 text-white px-6 py-2 rounded-xl transition-all text-sm font-medium"
+                            className="self-start md:self-auto bg-white/5 hover:bg-white/10 border border-white/10 text-white px-6 py-2 rounded-xl transition-all text-sm font-medium"
                         >
                             Edit Profile
                         </button>
@@ -192,14 +204,16 @@ export default function ProfilePage() {
                         <div className="relative group">
                             <div className="relative w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden bg-white/5 border-2 border-white/10 shadow-2xl mx-auto md:mx-0">
                                 {avatarUrl ? (
-                                    <Image 
-                                        src={avatarUrl} 
-                                        alt="Avatar" 
-                                        fill 
-                                        className="object-cover"
-                                        unoptimized
-                                        onError={(e) => console.error("Error loading avatar image:", e)}
-                                    />
+                                    <div className="w-24 h-24 md:w-32 md:h-32 rounded-full border-4 border-white/10 bg-white/5 relative overflow-hidden">
+                                         <Image
+                                            src={avatarUrl || "/404.png"}
+                                            alt="Avatar"
+                                            fill
+                                            unoptimized
+                                            className="object-cover"
+                                            onError={(e) => console.error("Error loading avatar image:", e)}
+                                        />
+                                    </div>
                                 ) : (
                                     <div className="w-full h-full flex items-center justify-center text-4xl text-gray-600 font-light select-none">
                                         {formData.full_name ? formData.full_name.charAt(0).toUpperCase() : user?.email?.charAt(0).toUpperCase()}

@@ -29,9 +29,15 @@ export default function Dashboard({ user }: { user: User }) {
         loadOOTD();
         
         const hour = new Date().getHours();
-        if (hour < 12) setGreeting("Good Morning");
-        else if (hour < 18) setGreeting("Good Afternoon");
-        else setGreeting("Good Evening");
+        if (hour >= 5 && hour < 12) {
+            setGreeting("Good Morning");
+        } else if (hour >= 12 && hour < 18) {
+            setGreeting("Good Afternoon");
+        } else if (hour >= 18 && hour < 22) {
+            setGreeting("Good Evening");
+        } else {
+            setGreeting("Good Night");
+        }
     }, []);
 
     const handleWear = async () => {
