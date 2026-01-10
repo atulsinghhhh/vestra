@@ -28,5 +28,5 @@ export async function GET(request: Request) {
   }
 
   // return the user to an error page with instructions
-  return NextResponse.redirect(`${origin}/login?error=auth_code_error`);
+  return NextResponse.redirect(`${origin}/login?error=auth_code_error&message=${encodeURIComponent(searchParams.get("error_description") || "Unknown error")}`);
 }

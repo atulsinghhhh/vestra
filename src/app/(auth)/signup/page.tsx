@@ -28,7 +28,7 @@ export default function SignupPage() {
           data: {
             full_name: name,
           },
-          emailRedirectTo: `https://vestra-mu.vercel.app/auth/callback?next=/`,
+          emailRedirectTo: `${window.location.origin}/auth/callback?next=/`,
         },
       });
 
@@ -55,7 +55,6 @@ export default function SignupPage() {
 
   return (
     <div className="min-h-screen w-full bg-[#050505] flex items-center justify-center relative overflow-hidden text-gray-200 font-sans selection:bg-white/10">
-      {/* Ambient Background Elements - Anti-gravity orbs */}
       <div className="absolute top-[-10%] left-[-10%] w-[600px] h-[600px] rounded-full bg-purple-900/10 blur-[120px] animate-pulse-slowpointer-events-none" />
       <div className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] rounded-full bg-indigo-900/10 blur-[120px] pointer-events-none" />
       <div className="absolute top-[40%] left-[50%] translate-x-[-50%] translate-y-[-50%] w-[800px] h-[800px] rounded-full bg-white/1 blur-[100px] pointer-events-none" />
