@@ -28,7 +28,7 @@ export default function SignupPage() {
           data: {
             full_name: name,
           },
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
+          emailRedirectTo: `https://vestra-mu.vercel.app/auth/callback`,
         },
       });
 
