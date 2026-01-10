@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  experimental: {
+    proxyTimeout: 30_000,
+  },
   images: {
     remotePatterns: [
       {
