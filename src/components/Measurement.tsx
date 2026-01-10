@@ -113,26 +113,6 @@ function Measurement({ onSaveSuccess, hideQuizButton = false, showAsStep = false
         }
     };
 
-    const handleGenerateNewOutfit = async () => {
-        if (!userId) return;
-
-        setGeneratingOutfit(true);
-        setError(null);
-        try {
-            const outfit = await generateOutfit(userId);
-            if (outfit && outfit.generated_text) {
-                setOutfitSuggestion(outfit.generated_text);
-            } else {
-                setError('Failed to generate outfit suggestion.');
-            }
-        } catch (outfitError) {
-            console.error('Error generating outfit:', outfitError);
-            setError('Failed to generate outfit suggestion.');
-        } finally {
-            setGeneratingOutfit(false);
-        }
-    };
-
     const formSection = (
         <div className="relative">
             <div className="absolute inset-0 bg-white/5 backdrop-blur-2xl rounded-3xl border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)]" />

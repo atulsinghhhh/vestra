@@ -3,12 +3,16 @@
 import { createClient } from "@/lib/supabase/client";
 import { useState, useEffect } from "react";
 import WardrobeItemForm from "@/components/WardrobeItemForm";
+import WardrobeGenerator from "@/components/WardrobeGenerator";
+import DummyDataSeeder from "@/components/DummyDataSeeder";
 import type { WardrobeItem } from "@/lib/wardrobe/types";
+import { getPublicImageUrl, preloadImages } from "@/lib/supabase/imageUtils";
 
 function WardrobePage() {
     const supabase = createClient();
 
     const [wardrobeItems, setWardrobeItems] = useState<WardrobeItem[]>([]);
+    const [imageUrls, setImageUrls] = useState<Record<string, string>>({});
     const [userId, setUserId] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
     const [showForm, setShowForm] = useState(false);
@@ -34,7 +38,27 @@ function WardrobePage() {
                 .order("created_at", { ascending: false });
 
             if (error) throw error;
-            setWardrobeItems(data || []);
+            
+            const items = data || [];
+            setWardrobeItems(items);
+            
+            // Preload all images
+            if (items.length > 0) {
+                const imagePaths = items.map(item => item.image_url);
+                await preloadImages(imagePaths);
+                
+                // Generate public URLs for all images
+                const urls: Record<string, string> = {};
+                for (const item of items) {
+                    if (item.id && item.image_url) {
+                        const publicUrl = await getPublicImageUrl(item.image_url);
+                        if (publicUrl) {
+                            urls[item.id] = publicUrl;
+                        }
+                    }
+                }
+                setImageUrls(urls);
+            }
         } catch (error) {
             console.error("Error fetching wardrobe items:", error);
         } finally {
@@ -45,6 +69,16 @@ function WardrobePage() {
     const handleItemAdded = (newItem: WardrobeItem) => {
         setWardrobeItems((prev) => [newItem, ...prev]);
         setShowForm(false);
+        
+        // Update image URLs for new item
+        if (newItem.id && newItem.image_url) {
+            const itemId = newItem.id;
+            getPublicImageUrl(newItem.image_url).then(url => {
+                if (url) {
+                    setImageUrls(prev => ({ ...prev, [itemId]: url }));
+                }
+            });
+        }
     };
 
     return (
@@ -70,6 +104,9 @@ function WardrobePage() {
                     </button>
                 </div>
 
+                {/* Wardrobe AI Generator */}
+                {userId && <WardrobeGenerator userId={userId} />}
+
                 {/* Add Item Form */}
                 {showForm && userId && (
                     <div className="mb-8">
@@ -94,17 +131,25 @@ function WardrobePage() {
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                        {wardrobeItems.map((item) => (
+                        {wardrobeItems.map((item) => {
+                            const imageUrl = item.id ? imageUrls[item.id] || item.image_url : item.image_url;
+                            
+                            return (
                             <div
                                 key={item.id}
                                 className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:bg-white/10 transition group"
                             >
-                                {item.image_url ? (
+                                {imageUrl ? (
                                     <div className="aspect-square overflow-hidden bg-white/5">
                                         <img
-                                            src={item.image_url}
+                                            src={imageUrl}
                                             alt={item.item_name}
                                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                            loading="lazy"
+                                            onError={(e) => {
+                                                console.warn(`Image failed to load for ${item.item_name}`);
+                                                (e.target as HTMLImageElement).style.display = "none";
+                                            }}
                                         />
                                     </div>
                                 ) : (
@@ -141,12 +186,15 @@ function WardrobePage() {
                                     )}
                                 </div>
                             </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 )}
             </div>
+            <DummyDataSeeder />
         </div>
     );
 }
 
 export default WardrobePage;
+ 

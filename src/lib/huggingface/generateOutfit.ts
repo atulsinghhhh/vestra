@@ -6,12 +6,6 @@ import { getLiveWeatherByLocation } from "../weather/fetchWeather";
 import { classifyWeatherCategories } from "../weather/classify";
 import { generateWeatherAwareOutfit } from "../weather/recommendation";
 import { calculateSeason, isValidSkinTone, isValidUndertone } from "../seasonColor";
-// import { InferenceClient } from "@huggingface/inference";
-
-// InferenceClient import removed as we are using fetch directly
-// const huggingface_Client = new InferenceClient(
-//     process.env.GROQ_API_KEY!
-// );
 
 export async function generateOutfit(userId: string) {
 
@@ -115,8 +109,6 @@ Instructions:
         const data = await response.json();
         const generatedText = data.choices[0]?.message?.content || "No outfit suggestion generated.";
         
-        // console.log('Outfit Suggestion Output:', generatedText);
-
         return {
             generated_text: generatedText
         };
@@ -125,4 +117,3 @@ Instructions:
         throw error;
     }
 }
-
