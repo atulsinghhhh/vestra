@@ -7,9 +7,9 @@ import { classifyWeatherCategories } from "../weather/classify";
 import { generateWeatherAwareOutfit } from "../weather/recommendation";
 import { calculateSeason, isValidSkinTone, isValidUndertone } from "../seasonColor";
 import { filterWardrobeItems, generateOutfitCandidates, WeatherCondition } from "../wardrobe/outfitLogic";
-import { FormalityEnum } from "../wardrobe/types";
+import { FormalityEnum, WardrobeItem } from "../wardrobe/types";
 
-export async function generateWardrobeOutfit(userId: string, formalityRaw: string = 'casual') {
+export async function generateWardrobeOutfit(userId: string, formalityRaw: string = 'casual', preFilteredItems?: WardrobeItem[]) {
 
     const supabase = await createClient();
 
@@ -29,18 +29,22 @@ export async function generateWardrobeOutfit(userId: string, formalityRaw: strin
         .eq('user_id', userId)
         .maybeSingle();
 
-    // Fetch Wardrobe Items
-    const { data: wardrobeRaw } = await supabase
-        .from('wardrobe_items')
-        .select('*')
-        .eq('user_id', userId);
-    
-    let wardrobeItems = wardrobeRaw || [];
+    let wardrobeItems: WardrobeItem[] = [];
 
-    // ------------------------------------------------------------------
-    // Step 1: Filter Wardrobe (SQL + Code)
-    // ------------------------------------------------------------------
-    wardrobeItems = filterWardrobeItems(wardrobeItems);
+    if (preFilteredItems) {
+        // Use provided items directly (assume already filtered)
+        wardrobeItems = preFilteredItems;
+    } else {
+        // Fetch Wardrobe Items
+        const { data: wardrobeRaw } = await supabase
+            .from('wardrobe_items')
+            .select('*')
+            .eq('user_id', userId);
+        
+        wardrobeItems = wardrobeRaw || [];
+        // Step 1: Filter Wardrobe (SQL + Code)
+        wardrobeItems = filterWardrobeItems(wardrobeItems);
+    }
 
     let seasonUi: string | undefined = undefined;
     const rawSeason: string | undefined = skin?.seasonal_palette ?? undefined;
@@ -107,6 +111,7 @@ User Profile:
 - Palette: ${paletteLine}
 - Weather: ${weatherText}
 - Required Formality: ${formalityRaw}
+- Note: Candidates are strictly filtered for the occasion.
 
 Pre-selected Candidates:
 ${candidatesText || "No valid candidates found based on strict rules. Suggest a theoretical outfit instead."}

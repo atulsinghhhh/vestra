@@ -52,7 +52,7 @@ function mapTripTypeToFormality(type: string): FormalityEnum {
     return "casual";
 }
 
-function getFormalityScore(f?: FormalityEnum): number {
+export function getFormalityScore(f?: FormalityEnum): number {
     switch (f) {
         case "casual": return 1;
         case "smart_casual": return 2;
