@@ -5,7 +5,7 @@ import { getUserLocationByUserId } from "../supabase/userLocation";
 import { getLiveWeatherByLocation } from "../weather/fetchWeather";
 import { classifyWeatherCategories } from "../weather/classify";
 import { generateWeatherAwareOutfit } from "../weather/recommendation";
-import { calculateSeason, isValidSkinTone, isValidUndertone } from "../seasonColor";
+import { calculateSeason, isValidSkinTone, isValidUndertone, SkinTone, Undertone } from "../seasonColor";
 
 export async function generateOutfit(userId: string) {
 
@@ -32,7 +32,7 @@ export async function generateOutfit(userId: string) {
     if (rawSeason === "spring" || rawSeason === "summar" || rawSeason === "autumn" || rawSeason === "winter") {
         seasonUi = rawSeason === "summar" ? "summer" : rawSeason;
     } else if (skin?.skin_tone && skin?.undertone && isValidSkinTone(String(skin.skin_tone)) && isValidUndertone(String(skin.undertone))) {
-        seasonUi = calculateSeason(String(skin.undertone) as any, String(skin.skin_tone) as any);
+        seasonUi = calculateSeason(String(skin.undertone) as Undertone, String(skin.skin_tone) as SkinTone);
     }
 
     const location = await getUserLocationByUserId(userId);
@@ -44,7 +44,7 @@ export async function generateOutfit(userId: string) {
         categories = classifyWeatherCategories(weather);
         weatherOutfit = generateWeatherAwareOutfit({
             baseFit: 'regular',
-            skinProfile: seasonUi ? { season: seasonUi as any } : undefined,
+            skinProfile: seasonUi ? { season: seasonUi as "spring" | "summer" | "autumn" | "winter" } : undefined,
             weather,
         });
         weatherText = `Weather in ${location.city}, ${location.country}: ${weather.temperature}°C, humidity ${weather.humidity}%, wind ${weather.wind_speed} km/h, condition ${weather.condition}. Categories: ${categories.join(', ')}.`

@@ -3,7 +3,7 @@ import { getUserLocationByUserId } from "@/lib/supabase/userLocation";
 import { getLiveWeatherByLocation } from "@/lib/weather/fetchWeather";
 import classifyWeatherCategories from "@/lib/weather/classify";
 import generateWeatherAwareOutfit from "@/lib/weather/recommendation";
-import { calculateSeason, isValidSkinTone, isValidUndertone, type SeasonKey } from "@/lib/seasonColor";
+import { calculateSeason, isValidSkinTone, isValidUndertone, type SeasonKey, type SkinTone, type Undertone } from "@/lib/seasonColor";
 import { buildRuleBasedSuggestions, inferBaseFit } from "@/lib/outfit/ruleBasedSuggestions";
 import OutfitSuggestionsGrid from "@/components/OutfitSuggestionsGrid";
 
@@ -54,7 +54,7 @@ export default async function Page() {
         season = rawSeason === "summar" ? "summer" : (rawSeason as SeasonKey);
     } else if (skin?.skin_tone && skin?.undertone && isValidSkinTone(String(skin.skin_tone)) && isValidUndertone(String(skin.undertone))) {
         // Fallback: compute season from skin tone + undertone
-        season = calculateSeason(String(skin.undertone) as any, String(skin.skin_tone) as any);
+        season = calculateSeason(String(skin.undertone) as Undertone, String(skin.skin_tone) as SkinTone);
     }
 
     const location = await getUserLocationByUserId(user.id);
@@ -85,7 +85,7 @@ export default async function Page() {
         fabrics: suggestion.fabrics,
         layering: suggestion.layering,
         colorPalette: suggestion.colorGuidance.palette,
-        avoidColors: skin?.avoid_colors as any,
+        avoidColors: (skin?.avoid_colors as string[]) || [],
         colorIntensity: suggestion.colorGuidance.intensity,
     });
 

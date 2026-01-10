@@ -13,29 +13,15 @@ export default function OnboardingPage() {
 
     const [userId, setUserId] = useState<string | null>(null);
     const [currentStep, setCurrentStep] = useState(1);
-    const [loading, setLoading] = useState(false);
+    
+    // We removed unnecessary state variables here as they were unused or causing warnings.
+    // If we need them back for UI feedback, we can add them back and use them.
+    // user_id checkExistingData handles redirection.
 
-    // Track completion status
-    const [measurementsSaved, setMeasurementsSaved] = useState(false);
-    const [skinToneSaved, setSkinToneSaved] = useState(false);
-    const [locationSaved, setLocationSaved] = useState(false);
-
-    useEffect(() => {
-        const fetchUser = async () => {
-        const { data: { user } } = await supabase.auth.getUser();
-            if (user) {
-                setUserId(user.id);
-                checkExistingData(user.id);
-            } else {
-                router.push("/login");
-            }
-        };
-        fetchUser();
-    }, []);
-
+    // Move declaration UP
     const checkExistingData = async (uid: string) => {
         try {
-        // Check measurements
+            // Check measurements
             const { data: measurements } = await supabase
                 .from("user_measurements")
                 .select("id")
@@ -56,10 +42,6 @@ export default function OnboardingPage() {
                 .eq("user_id", uid)
                 .maybeSingle();
 
-            if (measurements) setMeasurementsSaved(true);
-            if (skinProfile) setSkinToneSaved(true);
-            if (location) setLocationSaved(true);
-
             // If all data exists, redirect to outfit page
             if (measurements && skinProfile && location) {
                 router.push("/outfit");
@@ -69,18 +51,29 @@ export default function OnboardingPage() {
         }
     };
 
+    useEffect(() => {
+        const fetchUser = async () => {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (user) {
+                setUserId(user.id);
+                await checkExistingData(user.id);
+            } else {
+                router.push("/login");
+            }
+        };
+        fetchUser();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     const handleMeasurementsSaved = () => {
-        setMeasurementsSaved(true);
         setCurrentStep(2);
     };
 
     const handleSkinToneSaved = () => {
-        setSkinToneSaved(true);
         setCurrentStep(3);
     };
 
     const handleLocationSaved = () => {
-        setLocationSaved(true);
         // All steps complete, redirect to outfit page
         router.push("/outfit");
     };

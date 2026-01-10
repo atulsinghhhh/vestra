@@ -26,7 +26,7 @@ function filterWardrobeForTrip(
 
         if (item.season && item.season.length > 0) {
             const isAllSeason = item.season.includes("all-season");
-            const matchesSeason = item.season.includes(tripSeason as any);
+            const matchesSeason = item.season.includes(tripSeason as "summer" | "winter" | "spring" | "autumn");
             if (!isAllSeason && !matchesSeason) return false;
         }
         if (getFormalityScore(item.formality) < getFormalityScore(requiredFormality)) {
@@ -108,7 +108,7 @@ export async function generateTripPackingList(
     const eligibleItems = filterWardrobeForTrip(allItems, trip, weatherCondition, season);
     
     const outfits: PackedOutfit[] = [];
-    const usedItemIds = new Set<string>();
+    // const usedItemIds = new Set<string>(); // Unused
 
     const candidates = generateOutfitCandidates(eligibleItems, {
         weather: weatherCondition,

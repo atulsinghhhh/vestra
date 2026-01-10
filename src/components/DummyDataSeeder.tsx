@@ -86,7 +86,7 @@ export default function DummyDataSeeder() {
           brand: "Burberry",
           purchase_date: randomDate(oneYearAgo, today),
           worn_count: randomInt(10),
-          last_worn_date: null as any,
+          last_worn_date: undefined,
           is_available: true
         },
          {
@@ -136,7 +136,7 @@ export default function DummyDataSeeder() {
           brand: "Zara",
           purchase_date: randomDate(oneYearAgo, today),
           worn_count: randomInt(5),
-          last_worn_date: null as any,
+          last_worn_date: undefined,
           is_available: true
         },
         {
@@ -231,7 +231,7 @@ export default function DummyDataSeeder() {
           brand: "Mejuri",
           purchase_date: randomDate(oneYearAgo, today),
           worn_count: randomInt(10),
-          last_worn_date: null as any,
+          last_worn_date: undefined,
           is_available: true
         },
         {
@@ -278,7 +278,7 @@ export default function DummyDataSeeder() {
           brand: "Hermès",
           purchase_date: randomDate(oneYearAgo, today),
           worn_count: randomInt(3),
-          last_worn_date: null as any,
+          last_worn_date: undefined,
           is_available: true
         },
         {
@@ -342,7 +342,7 @@ export default function DummyDataSeeder() {
           brand: "J.Crew",
           purchase_date: randomDate(oneYearAgo, today),
           worn_count: randomInt(10),
-          last_worn_date: null as any,
+          last_worn_date: undefined,
           is_available: true
         },
         {
@@ -358,7 +358,7 @@ export default function DummyDataSeeder() {
           brand: "Club Monaco",
           purchase_date: randomDate(oneYearAgo, today),
           worn_count: randomInt(8),
-          last_worn_date: null as any,
+          last_worn_date: undefined,
           is_available: true
         },
         {
@@ -374,7 +374,7 @@ export default function DummyDataSeeder() {
           brand: "Birkenstock",
           purchase_date: randomDate(oneYearAgo, today),
           worn_count: randomInt(30),
-          last_worn_date: null as any,
+          last_worn_date: undefined,
           is_available: true
         },
         {
@@ -440,7 +440,7 @@ export default function DummyDataSeeder() {
           brand: "Saint James",
           purchase_date: randomDate(oneYearAgo, today),
           worn_count: randomInt(20),
-          last_worn_date: null as any,
+          last_worn_date: undefined,
           is_available: true
         },
         {
@@ -456,7 +456,7 @@ export default function DummyDataSeeder() {
           brand: "Reiss",
           purchase_date: randomDate(oneYearAgo, today),
           worn_count: randomInt(4),
-          last_worn_date: null as any,
+          last_worn_date: undefined,
           is_available: true
         },
         {
@@ -472,7 +472,7 @@ export default function DummyDataSeeder() {
           brand: "Ralph Lauren",
           purchase_date: randomDate(oneYearAgo, today),
           worn_count: randomInt(15),
-          last_worn_date: null as any,
+          last_worn_date: undefined,
           is_available: true
         }
       ];

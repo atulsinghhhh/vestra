@@ -10,6 +10,9 @@ import {
     calculateSeason,
     toDbSeasonKey,
     isValidSkinTone,
+    type Undertone,
+    type SkinTone,
+    type SeasonKey,
 } from "@/lib/seasonColor";
 
 type Props = {
@@ -68,7 +71,7 @@ export default function SkinToneQuiz({ userId, onSaveSuccess }: Props) {
 
     const { picked } = computeScores();
     setUndertone(picked);
-    const s = calculateSeason(picked as any, skinTone as any);
+    const s = calculateSeason(picked as Undertone, skinTone as SkinTone);
     setSeason(s);
   };
 
@@ -86,18 +89,18 @@ export default function SkinToneQuiz({ userId, onSaveSuccess }: Props) {
       return;
     }
 
-    if (!UNDERTONE_ENUM.includes(undertone as any)) {
+    if (!UNDERTONE_ENUM.includes(undertone as "cool" | "warm" | "neutral")) {
       setError("Please calculate undertone before saving.");
       return;
     }
 
-    if (!SEASON_UI_ENUM.includes(season as any)) {
+    if (!SEASON_UI_ENUM.includes(season as "spring" | "summer" | "autumn" | "winter")) {
       setError("Seasonal palette not calculated.");
       return;
     }
 
     const palette = seasonPalettes[season as keyof typeof seasonPalettes];
-    const dbSeason = toDbSeasonKey(season as any);
+    const dbSeason = toDbSeasonKey(season as SeasonKey);
 
     const payload = {
       user_id: userId,
@@ -120,8 +123,8 @@ export default function SkinToneQuiz({ userId, onSaveSuccess }: Props) {
       }
       setSuccess(true);
       onSaveSuccess?.();
-    } catch (e: any) {
-      setError(e?.message || "Failed to save skin profile.");
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : "Failed to save skin profile.");
     } finally {
       setSaving(false);
     }

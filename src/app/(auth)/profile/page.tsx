@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { User } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
@@ -19,7 +20,7 @@ export default function ProfilePage() {
     const router = useRouter();
     
     const [loading, setLoading] = useState(true);
-    const [user, setUser] = useState<any>(null);
+    const [user, setUser] = useState<User | null>(null);
     const [profile, setProfile] = useState<Profile | null>(null);
     const [editing, setEditing] = useState(false);
     const [saving, setSaving] = useState(false);
@@ -70,7 +71,7 @@ export default function ProfilePage() {
                     setAvatarUrl(data?.signedUrl || null);
                 }
 
-            } catch (err) {
+            } catch (err: unknown) {
                 console.error(err);
             } finally {
                 setLoading(false);
@@ -92,7 +93,7 @@ export default function ProfilePage() {
         try {
             const updates = {
                 id: user.id,
-                email: user.email,
+                email: user.email ?? null,
                 username: formData.username,
                 full_name: formData.full_name,
                 gender: formData.gender,
@@ -103,15 +104,15 @@ export default function ProfilePage() {
 
             if (error) throw error;
         
-            setProfile((prev: any) => ({ ...prev, ...updates }));
+            setProfile((prev) => prev ? ({ ...prev, ...updates }) : null);
             setEditing(false);
             setMessage({ type: 'success', text: "Profile updated successfully!" });
 
             setTimeout(() => setMessage(null), 3000);
 
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error("Error updating profile:", error);
-            setMessage({ type: 'error', text: error.message || "Failed to update profile." });
+            setMessage({ type: 'error', text: error instanceof Error ? error.message : "Failed to update profile." });
         } finally {
             setSaving(false);
         }
@@ -141,7 +142,7 @@ export default function ProfilePage() {
             .createSignedUrl(filePath, 3600);
 
             setAvatarUrl(data?.signedUrl || null);
-        } catch (err) {
+        } catch (err: unknown) {
             console.error(err);
         } finally {
             setSaving(false);

@@ -4,8 +4,7 @@ import { createClient } from "../supabase/server";
 import { getUserLocationByUserId } from "../supabase/userLocation";
 import { getLiveWeatherByLocation } from "../weather/fetchWeather";
 import { classifyWeatherCategories } from "../weather/classify";
-import { generateWeatherAwareOutfit } from "../weather/recommendation";
-import { calculateSeason, isValidSkinTone, isValidUndertone } from "../seasonColor";
+import { calculateSeason, isValidSkinTone, isValidUndertone, SkinTone, Undertone } from "../seasonColor";
 import { filterWardrobeItems, generateOutfitCandidates, WeatherCondition } from "../wardrobe/outfitLogic";
 import { FormalityEnum, WardrobeItem } from "../wardrobe/types";
 
@@ -51,24 +50,21 @@ export async function generateWardrobeOutfit(userId: string, formalityRaw: strin
     if (rawSeason === "spring" || rawSeason === "summar" || rawSeason === "autumn" || rawSeason === "winter") {
         seasonUi = rawSeason === "summar" ? "summer" : rawSeason;
     } else if (skin?.skin_tone && skin?.undertone && isValidSkinTone(String(skin.skin_tone)) && isValidUndertone(String(skin.undertone))) {
-        seasonUi = calculateSeason(String(skin.undertone) as any, String(skin.skin_tone) as any);
+        seasonUi = calculateSeason(String(skin.undertone) as Undertone, String(skin.skin_tone) as SkinTone);
     }
 
     const location = await getUserLocationByUserId(userId);
     let weatherText = "";
     let categories: string[] = [];
-    let weatherOutfit: ReturnType<typeof generateWeatherAwareOutfit> | null = null;
+    // let weatherOutfit: ReturnType<typeof generateWeatherAwareOutfit> | null = null;
     let weatherCondition: WeatherCondition = "neutral";
     let currentSeason: "summer" | "winter" | "spring" | "autumn" = "summer";
 
     if (location) {
         const weather = await getLiveWeatherByLocation(location.city, location.country);
         categories = classifyWeatherCategories(weather);
-        weatherOutfit = generateWeatherAwareOutfit({
-            baseFit: 'regular',
-            skinProfile: seasonUi ? { season: seasonUi as any } : undefined,
-            weather,
-        });
+        // generateWeatherAwareOutfit unused for candidate logic but good for metadata if needed
+        // weatherOutfit = generateWeatherAwareOutfit({...});
         weatherText = `Weather in ${location.city}, ${location.country}: ${weather.temperature}°C, humidity ${weather.humidity}%, wind ${weather.wind_speed} km/h, condition ${weather.condition}. Categories: ${categories.join(', ')}.`
         
         if (weather.temperature < 15) weatherCondition = "cold";
@@ -79,10 +75,6 @@ export async function generateWardrobeOutfit(userId: string, formalityRaw: strin
         else if (weather.temperature < 10) currentSeason = "winter";
         else currentSeason = "spring"; 
     }
-
-    const unitIsMetric = m.measurement_unit === 'metric';
-    const preferredColors = Array.isArray(skin?.perferred_colors) ? skin?.perferred_colors : undefined;
-    const avoidColors = Array.isArray(skin?.avoid_colors) ? skin?.avoid_colors : undefined;
 
     // ------------------------------------------------------------------
     // Step 2: Build Outfit Candidates (Combinatorial)

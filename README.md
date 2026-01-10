@@ -1,74 +1,82 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Vestra - AI-Powered Personal Wardrobe Stylist 👗✨
 
-## Getting Started
+Vestra is a modern, intelligent fashion companion that helps you organize your wardrobe, discover new outfits, and pack smarter for your trips. Using advanced AI, it analyzes your personal style, skin tone, and local weather to provide daily outfit recommendations.
 
-First, run the development server:
+## 🚀 Key Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **📂 Digital Wardrobe**: Upload and categorize your clothes to create a searchable digital closet.
+- **🤖 AI Outfit Generator**: Get personalized outfit suggestions based on your existing wardrobe and specific occasions (Casual, Business, Formal).
+- **☀️ Weather-Smart OOTD**: Daily "Outfit of the Day" recommendations adapted to your local weather conditions and personal style.
+- **🎨 Skin Tone Analysis**: Interactive quiz to determine your seasonal color palette (Spring, Summer, Autumn, Winter) and find colors that suit you best.
+- **🧳 Smart Packing Lists**: Generate AI-curated packing lists for your trips based on destination weather, duration, and planned activities.
+- **📊 Style Analytics**: Track your most worn items and identify wardrobe gaps.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🛠️ Tech Stack
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Frontend**: [Next.js 16](https://nextjs.org/) (App Router), [React 19](https://react.dev/), [TypeScript](https://www.typescriptlang.org/)
+- **Styling**: [Tailwind CSS v4](https://tailwindcss.com/) & [Framer Motion](https://www.framer.com/motion/) for animations.
+- **Backend & Auth**: [Supabase](https://supabase.com/) (PostgreSQL, Auth, Storage).
+- **AI & Inference**:
+  - [Groq SDK](https://groq.com/) (Llama models for fast inference).
+  - [Hugging Face](https://huggingface.co/) (Image classification and analysis).
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🏁 Getting Started
 
-## Learn More
+### Prerequisites
 
-To learn more about Next.js, take a look at the following resources:
+- Node.js 18+ installed.
+- A [Supabase](https://supabase.com/) project (with Database and Storage buckets configured).
+- API Keys for Groq (for AI outfit generation).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Installation
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. **Clone the repository:**
 
-## Deploy on Vercel
+   ```bash
+   git clone https://github.com/StartLord-22/vestra.git
+   cd vestra
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+2. **Install dependencies:**
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+   ```bash
+   npm install
+   ```
 
-## Weather-aware Outfit Suggestions
+3. **Set up environment variables:**
+   Create a `.env.local` file in the root directory and add your credentials:
 
-This project includes weather classification and outfit recommendation logic.
+   ```env
+   NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+   GROQ_API_KEY=your_groq_api_key
+   HF_ACCESS_TOKEN=your_huggingface_token
+   ```
 
-- New page: [src/app/(app)/outfit/page.tsx](src/app/(app)/outfit/page.tsx)
-- Core logic: 
-	- [src/lib/weather/classify.ts](src/lib/weather/classify.ts)
-	- [src/lib/weather/recommendation.ts](src/lib/weather/recommendation.ts)
-	- [src/lib/weather/fetchWeather.ts](src/lib/weather/fetchWeather.ts)
-- UI component: [src/components/WeatherOutfitSuggestion.tsx](src/components/WeatherOutfitSuggestion.tsx)
+4. **Run the development server:**
 
-### Environment
+   ```bash
+   npm run dev
+   ```
 
-Add your OpenWeather API key to `.env` (server-side use):
+5. **Open the app:**
+   Visit [http://localhost:3000](http://localhost:3000) in your browser.
 
-```bash
-OPENWEATHER_API_KEY=your_api_key_here
-GROQ_API_KEY=your_groq_api_key_here
-```
+## 📂 Project Structure
 
-Ensure Supabase environment vars are already set (`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`).
+- `src/app`: Next.js App Router pages (Dashboard, Wardrobe, Outfit, etc.).
+- `src/components`: Reusable UI components using Tailwind CSS.
+- `src/lib`: Core business logic, AI integrations, and Supabase clients.
+- `src/lib/seasonColor`: Logic for color analysis and skin tone quizzes.
 
-### Supabase Table
+## 🤝 Contributing
 
-Create the `user_location` table if it doesn't exist:
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-```sql
-create table public.user_location (
-	id uuid primary key default gen_random_uuid(),
-	user_id uuid unique not null,
-	city varchar not null,
-	country varchar not null,
-	weather_preferences jsonb
-);
-```
+## 📄 License
 
-The page uses the authenticated user's `user_location` to fetch live weather and render outfit guidance.
+This project is licensed under the MIT License.
+
+---
+
+_Built with ❤️ by Atul Rathore_

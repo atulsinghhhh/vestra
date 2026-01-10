@@ -5,7 +5,7 @@ export type UserLocationRow = {
   user_id: string;
   city: string;
   country: string;
-  weather_preferences: any | null;
+  weather_preferences: Record<string, unknown> | null;
 };
 
 export async function getUserLocationByUserId(userId: string): Promise<UserLocationRow | null> {

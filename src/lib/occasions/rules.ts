@@ -20,10 +20,10 @@ export const DRESS_CODE_RULES: Record<DressCode, OccasionRule> = {
         id: "business_casual",
         label: "Business Casual",
         minFormality: "smart_casual", // Can accept smart casual items
-        allowedFormalityFloor: "smart_casual", 
+        // allowedFormalityFloor removed as it's not in the type 
         disallowedSubCategories: ["jeans", "t-shirt", "sneakers", "hoodie", "shorts", "sandals"],
         // Note: Some places allow jeans + blazer for business casual, but let's be strict for safety first.
-    } as any, // casting allows extra props if needed or just sticking to type
+    },
     "business_formal": {
         id: "business_formal",
         label: "Business Formal",

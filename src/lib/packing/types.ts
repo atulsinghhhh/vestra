@@ -1,5 +1,5 @@
 
-import { WardrobeItem, FormalityEnum } from "../wardrobe/types";
+import { WardrobeItem } from "../wardrobe/types";
 
 export type TripDetails = {
     trip_id: string;

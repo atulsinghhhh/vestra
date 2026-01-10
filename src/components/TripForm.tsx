@@ -54,9 +54,9 @@ function TripForm({ onSuccess }: { onSuccess?: () => void }) {
             });
             alert("Trip added successfully!");
             if (onSuccess) onSuccess();
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error("Submission Error:", error);
-            setError(error.message || "Failed to add trip");
+            setError(error instanceof Error ? error.message : "Failed to add trip");
         } finally {
             setLoading(false);
         }

@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
+import { User } from "@supabase/supabase-js";
+import Image from "next/image";
 import { getDailyOutfitAction, confirmOutfitWearAction } from "@/lib/ootd/ootd";
 import { OOTDResult } from "@/lib/ootd/ootdLogic";
 
-export default function Dashboard({ user }: { user: any }) {
+export default function Dashboard({ user }: { user: User }) {
     const [ootd, setOotd] = useState<OOTDResult>(null);
     const [loading, setLoading] = useState(true);
     const [wearing, setWearing] = useState(false);
@@ -17,7 +18,7 @@ export default function Dashboard({ user }: { user: any }) {
         try {
             const res = await getDailyOutfitAction();
             setOotd(res);
-        } catch (e) {
+        } catch (e: unknown) {
             console.error(e);
         } finally {
             setLoading(false);
@@ -42,7 +43,7 @@ export default function Dashboard({ user }: { user: any }) {
                  await confirmOutfitWearAction(itemIds);
                  setWornToday(true);
             }
-        } catch (e) {
+        } catch {
             alert("Failed to update stats");
         } finally {
             setWearing(false);
@@ -60,7 +61,7 @@ export default function Dashboard({ user }: { user: any }) {
                 <header className="flex justify-between items-center mb-12">
                     <div>
                         <h1 className="text-3xl font-bold">{greeting}, {displayName}</h1>
-                        <p className="text-gray-400">Here's your style forecast for today.</p>
+                        <p className="text-gray-400">Here&apos;s your style forecast for today.</p>
                     </div>
                 </header>
 
@@ -98,7 +99,7 @@ export default function Dashboard({ user }: { user: any }) {
                                         {ootd.ai.note && (
                                              <div className="flex items-start gap-3 bg-purple-900/20 p-4 rounded-xl border border-purple-500/20">
                                                 <svg className="w-5 h-5 text-purple-400 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                                                <p className="text-sm text-purple-200 italic">"{ootd.ai.note}"</p>
+                                                <p className="text-sm text-purple-200 italic">&quot;{ootd.ai.note}&quot;</p>
                                              </div>
                                         )}
                                         
@@ -132,10 +133,10 @@ export default function Dashboard({ user }: { user: any }) {
                                     <div className="h-[400px] w-full bg-white/5 rounded-3xl animate-pulse"></div>
                                 ) : ootd && ootd.outfit ? (
                                     <div className="grid grid-cols-2 gap-4 h-full content-center">
-                                         {ootd.outfit.items.map((item: any, i: number) => (
+                                         {ootd.outfit.items.map((item, i: number) => (
                                              <div key={i} className="group relative aspect-3/4 bg-white/5 rounded-2xl overflow-hidden border border-white/5">
                                                  {item.image_url ? (
-                                                     <img src={item.image_url} alt={item.item_name} className="w-full h-full object-cover transition-transform group-hover:scale-105" />
+                                                     <Image src={item.image_url} alt={item.item_name} fill className="object-cover transition-transform group-hover:scale-105" />
                                                  ) : (
                                                      <div className="w-full h-full flex items-center justify-center text-gray-700">No Image</div>
                                                  )}

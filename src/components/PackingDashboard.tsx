@@ -5,15 +5,22 @@ import TripForm from "./TripForm";
 import { generatePackingListAction, getUserTrips } from "@/lib/packing/packing";
 import { PackingList } from "@/lib/packing/types";
 
+interface Trip {
+    trip_id: string;
+    destination: string;
+    trip_type: string;
+    start_date: string;
+}
+
 export default function PackingDashboard() {
-    const [trips, setTrips] = useState<any[]>([]);
+    const [trips, setTrips] = useState<Trip[]>([]);
     const [selectedList, setSelectedList] = useState<PackingList | null>(null);
     const [loading, setLoading] = useState(false);
     const [generatingId, setGeneratingId] = useState<string | null>(null);
 
     const loadTrips = async () => {
         const t = await getUserTrips();
-        setTrips(t);
+        setTrips(t as Trip[]);
     };
 
     useEffect(() => {
@@ -25,8 +32,8 @@ export default function PackingDashboard() {
         try {
             const list = await generatePackingListAction(tripId);
             setSelectedList(list);
-        } catch (e) {
-            alert("Failed to generate list: " + e);
+        } catch (e: unknown) {
+            alert("Failed to generate list: " + (e instanceof Error ? e.message : "Unknown error"));
         } finally {
             setGeneratingId(null);
         }
@@ -127,7 +134,7 @@ export default function PackingDashboard() {
                                     <svg className="w-8 h-8 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
                                 </div>
                                 <p className="text-gray-400 font-medium">Select a trip to generate your packing list</p>
-                                <p className="text-gray-600 text-sm mt-1">We'll calculate everything you need</p>
+                                <p className="text-gray-600 text-sm mt-1">We&apos;ll calculate everything you need</p>
                             </div>
                         ) : (
                             <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500 relative z-10">

@@ -16,8 +16,8 @@ export function BodyClassifyType({ shoulderWidth, waist, hips }: {
     waist: number;
     hips: number;
 }) {
-    const shoulderWaistRatio = shoulderWidth / waist;
-    const hipShoulderRatio = hips / shoulderWidth;
+    // const shoulderWaistRatio = shoulderWidth / waist; // Unused
+    // const hipShoulderRatio = hips / shoulderWidth; // Unused
 
     if (Math.abs(shoulderWidth - hips) < 2 && waist < shoulderWidth * 0.75) {
         return BodyTypeEnum.HOURGLASS;

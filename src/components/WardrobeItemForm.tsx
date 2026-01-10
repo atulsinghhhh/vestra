@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import {
   WARDROBE_CATEGORY_ENUM,
@@ -8,6 +8,7 @@ import {
   FORMALITY_ENUM,
   SEASON_OPTIONS,
   type WardrobeItem,
+  type SeasonOption,
 } from "@/lib/wardrobe/types";
 
 type Props = {
@@ -50,9 +51,9 @@ export default function WardrobeItemForm({ userId, onSaveSuccess }: Props) {
   const handleSeasonToggle = (season: string) => {
     setFormData((prev) => {
       const currentSeasons = prev.season || [];
-      const updated = currentSeasons.includes(season as any)
+      const updated = currentSeasons.includes(season as SeasonOption)
         ? currentSeasons.filter((s) => s !== season)
-        : [...currentSeasons, season as any];
+        : [...currentSeasons, season as SeasonOption];
       return { ...prev, season: updated };
     });
   };
@@ -115,8 +116,8 @@ export default function WardrobeItemForm({ userId, onSaveSuccess }: Props) {
         ...prev,
         image_url: publicData.publicUrl,
       }));
-    } catch (err: any) {
-      setError(err?.message || "Failed to upload image");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Failed to upload image");
     } finally {
       setUploading(false);
     }
@@ -134,7 +135,7 @@ export default function WardrobeItemForm({ userId, onSaveSuccess }: Props) {
         return;
       }
 
-      const payload: any = {
+      const payload = {
         user_id: userId,
         item_name: formData.item_name,
         category: formData.category,
@@ -178,8 +179,8 @@ export default function WardrobeItemForm({ userId, onSaveSuccess }: Props) {
         purchase_date: "",
         tags: [],
       });
-    } catch (err: any) {
-      setError(err?.message || "Failed to save wardrobe item");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Failed to save wardrobe item");
     } finally {
       setSaving(false);
     }
@@ -366,14 +367,14 @@ export default function WardrobeItemForm({ userId, onSaveSuccess }: Props) {
                 <label
                   key={season}
                   className={`flex items-center justify-center gap-2 border rounded-xl px-4 py-3 text-sm cursor-pointer transition-all ${
-                    formData.season?.includes(season as any)
+                    formData.season?.includes(season as SeasonOption)
                       ? "bg-white/20 border-white/40 text-white"
                       : "bg-white/5 border-white/10 text-gray-400 hover:bg-white/10"
                   }`}
                 >
                   <input
                     type="checkbox"
-                    checked={formData.season?.includes(season as any)}
+                    checked={formData.season?.includes(season as SeasonOption)}
                     onChange={() => handleSeasonToggle(season)}
                     className="sr-only"
                   />

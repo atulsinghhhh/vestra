@@ -1,5 +1,5 @@
-import { WardrobeItem, FormalityEnum } from "../wardrobe/types";
-import { OccasionEvent, OccasionRule } from "./types";
+import { WardrobeItem } from "../wardrobe/types";
+import { OccasionEvent } from "./types";
 import { getRuleForDressCode } from "./rules";
 import { getFormalityScore } from "../packing/packingLogic"; // Reuse helper
 import { generateOutfitCandidates } from "../wardrobe/outfitLogic"; // Reuse core generator

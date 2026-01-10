@@ -17,8 +17,8 @@ export default function WardrobeGenerator({ userId }: Props) {
       const res = await generateWardrobeOutfit(userId, formality);
       setText(res?.generated_text ?? "No outfit suggestion generated.");
       setWeather(res?.weather_text ?? null);
-    } catch (e: any) {
-      setError(e?.message || "Failed to generate outfit.");
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : "Failed to generate outfit.");
     } finally {
       setLoading(false);
     }

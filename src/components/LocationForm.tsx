@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 
@@ -31,8 +31,8 @@ export default function LocationForm({ userId, initialCity = "", initialCountry 
       setSuccess(true);
       onSaveSuccess?.();
       router.refresh();
-    } catch (err: any) {
-      setError(err?.message || 'Failed to save location');
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Failed to save location');
     } finally {
       setSaving(false);
     }

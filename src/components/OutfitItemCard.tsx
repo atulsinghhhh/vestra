@@ -4,11 +4,9 @@ import { WardrobeItem } from "@/lib/wardrobe/types";
 
 function OutfitItemCard({
     item,
-    slot,
     onExclude,
 }: {
     item: WardrobeItem;
-    slot: string;
     onExclude: (itemId?: string | null) => void;
 }) {
     return (

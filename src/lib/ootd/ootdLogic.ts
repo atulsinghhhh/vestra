@@ -4,7 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getUserLocationByUserId } from "@/lib/supabase/userLocation";
 import { getLiveWeatherByLocation } from "@/lib/weather/fetchWeather";
 import { generateOutfitCandidates, WeatherCondition } from "@/lib/wardrobe/outfitLogic";
-import { WardrobeItem, FormalityEnum } from "@/lib/wardrobe/types";
+import { WardrobeItem } from "@/lib/wardrobe/types";
 
 export type OOTDResult = {
     outfit: {
@@ -59,7 +59,8 @@ export async function generateOOTD(userId: string): Promise<OOTDResult> {
         .from("wardrobe_items")
         .select("*")
         .eq("user_id", userId)
-        .eq("is_available", true); // Basic availability
+        .eq("is_available", true)
+        .returns<WardrobeItem[]>();
     
     if (!items || items.length === 0) return null;
 

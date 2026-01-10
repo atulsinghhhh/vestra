@@ -14,8 +14,8 @@ export default function AIOutfitGenerator({ userId }: Props) {
     try {
       const res = await generateOutfit(userId);
       setText(res?.generated_text ?? "No outfit suggestion generated.");
-    } catch (e: any) {
-      setError(e?.message || "Failed to generate outfit.");
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : "Failed to generate outfit.");
     } finally {
       setLoading(false);
     }
