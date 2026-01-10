@@ -31,27 +31,7 @@ export async function proxy(request: NextRequest) {
     }
   );
 
-  // Refresh session to ensure auth cookies are set
-  const { data, error } = await supabase.auth.refreshSession();
-  
-  // If there's a session, make sure cookies are properly set
-  if (data.session) {
-    const res = NextResponse.next({
-      request: {
-        headers: request.headers,
-      },
-    });
-    
-    // Set the auth cookies in the response
-    res.cookies.set("sb-iqjdcelihzdjpsqnveex-auth-token", data.session.access_token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      maxAge: 60 * 60 * 24 * 7,
-    });
-    
-    return res;
-  }
+  await supabase.auth.getUser();
 
   return response;
 }

@@ -1,9 +1,6 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  experimental: {
-    proxyTimeout: 30_000,
-  },
   images: {
     remotePatterns: [
       {
@@ -14,6 +11,7 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "images.unsplash.com",
+        pathname: "/**",
       },
       {
         protocol: "https",

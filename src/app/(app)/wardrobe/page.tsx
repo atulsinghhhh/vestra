@@ -60,15 +60,7 @@ function WardrobePage() {
             const { data: { user } } = await supabase.auth.getUser();
             if (user) {
                 setUserId(user.id);
-                // We're inside the effect, so we call the function we defined outside? 
-                // Wait, typically we define fetchWardrobeItems *inside* useEffect or wrap in useCallback.
-                // To keep it simple and avoid extensive refactors, we'll just move the fetch logic here 
-                // OR wrap fetchWardrobeItems in useCallback, but that requires wrapping supabase too.
-                // Simplest fix: Just call it. To suppress warning for 'fetchWardrobeItems' we can include it in deps 
-                // IF it's stable. It's not stable (re-created every render).
-                // So, let's move fetchWardrobeItems INSIDE useEffect or remove it from deps and ignore?
-                // Better: Move logic inside or use useCallback. 
-                // I'll move `fetchWardrobeItems` definition inside `useEffect` or wrap it.
+                fetchWardrobeItems(user.id);
             }
         };
         fetchUser();

@@ -19,7 +19,7 @@ export async function generateWardrobeOutfit(userId: string, formalityRaw: strin
         throw new Error('Failed to fetch user measurements');
     }
 
-    const m = data[0];
+    const m = (data && data[0]) || { body_type: 'Not specified' };
 
     // Skin profile
     const { data: skin } = await supabase
