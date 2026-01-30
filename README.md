@@ -62,6 +62,24 @@ Vestra is a modern, intelligent fashion companion that helps you organize your w
 5. **Open the app:**
    Visit [http://localhost:3000](http://localhost:3000) in your browser.
 
+### Run with Docker
+
+1. **Ensure Docker Desktop is running** (or any Docker Engine compatible environment).
+2. **Build and start the stack:**
+
+   ```bash
+   docker compose up --build
+   ```
+
+   This uses the provided `Dockerfile` and `.dockerignore` to build the Next.js app image, runs migrations if configured, and starts all defined services.
+3. **Stop the containers when done:**
+
+   ```bash
+   docker compose down
+   ```
+
+   Add `-v` if you also want to remove named volumes.
+
 ## 📂 Project Structure
 
 - `src/app`: Next.js App Router pages (Dashboard, Wardrobe, Outfit, etc.).
