@@ -3,6 +3,7 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import HomeOOTD from "@/components/HomeOOTD";
 
 export default function LandingPage() {
     const { scrollY } = useScroll();
@@ -95,6 +96,8 @@ export default function LandingPage() {
                      />
                 </motion.div>
             </section>
+
+            <HomeOOTD />
 
             {/* FEATURES - Minimal Cards */}
             <section id="features" className="py-20 px-6 bg-black relative z-10">

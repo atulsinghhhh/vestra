@@ -32,10 +32,7 @@ function WardrobePage() {
             const items = data || [];
             setWardrobeItems(items);
             
-            // Preload all images logic...
-            // Note: Since we are switching to Next/Image, preloading manually might not be strictly necessary if using optimized images,
-            // but we'll keep the signed URL logic.
-             if (items.length > 0) {
+            if (items.length > 0) {
                 const urls: Record<string, string> = {};
                 for (const item of items) {
                     if (item.id && item.image_url) {
@@ -64,17 +61,12 @@ function WardrobePage() {
             }
         };
         fetchUser();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []); 
-
-    // Actually, re-reading the error: "React Hook useEffect has missing dependencies: 'fetchWardrobeItems' and 'supabase.auth'".
-    // I can just disable the line if I want "componentDidMount" behavior.
     
     const handleItemAdded = (newItem: WardrobeItem) => {
         setWardrobeItems((prev) => [newItem, ...prev]);
         setShowForm(false);
-        
-        // Update image URLs for new item
+
         if (newItem.id && newItem.image_url) {
             const itemId = newItem.id;
             getPublicImageUrl(newItem.image_url).then(url => {

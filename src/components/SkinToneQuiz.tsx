@@ -148,21 +148,39 @@ export default function SkinToneQuiz({ userId, onSaveSuccess }: Props) {
 
         {/* Natural Skin Shade */}
         <div className="group relative">
-          <label className="text-xs text-gray-400 uppercase tracking-wide font-medium block mb-2">Natural Skin Shade</label>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-            {SKIN_TONE_ENUM.map((tone) => (
-              <label key={tone} className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-xl px-4 py-3.5 text-sm text-white cursor-pointer hover:bg-white/10 transition">
+          <label className="text-xs text-gray-400 uppercase tracking-wide font-medium block mb-4">Select your Skin Tone</label>
+          <div className="grid grid-cols-3 sm:grid-cols-6 gap-4">
+            {SKIN_TONE_ENUM.map((tone) => {
+              const colorMap: Record<string, string> = {
+                 fair: "#FFE0D1",
+                 light: "#EAC0A6",
+                 medium: "#D3A183",
+                 olive: "#C69666",
+                 tan: "#A37254",
+                 deep: "#6D4733",
+              };
+              const color = colorMap[tone] || "#ccc";
+              
+              return (
+              <label key={tone} className="cursor-pointer group/item text-center">
                 <input
                   type="radio"
                   name="skinTone"
                   value={tone}
                   checked={skinTone === tone}
                   onChange={(e) => setSkinTone(e.target.value)}
-                  className="accent-white"
+                  className="hidden"
                 />
-                <span className="capitalize">{tone}</span>
+                <div className={`w-12 h-12 sm:w-16 sm:h-16 rounded-full mx-auto mb-2 border-2 transition-all duration-300 ${skinTone === tone ? 'border-white scale-110 ring-2 ring-white/50' : 'border-transparent group-hover/item:scale-105'}`} style={{ backgroundColor: color }}>
+                    {skinTone === tone && (
+                        <div className="w-full h-full flex items-center justify-center">
+                            <svg className="w-6 h-6 text-black/50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
+                        </div>
+                    )}
+                </div>
+                <span className={`text-xs capitalize transition-colors ${skinTone === tone ? 'text-white font-medium' : 'text-gray-400 group-hover/item:text-gray-300'}`}>{tone}</span>
               </label>
-            ))}
+            )})}
           </div>
         </div>
 
